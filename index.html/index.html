@@ -122,77 +122,77 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const totalMeetings = 16;
-            const container = document.getElementById('meetings');
-            const progressBar = document.getElementById('progress-bar');
-            const namaInput = document.getElementById('nama');
-            const nimInput = document.getElementById('nim');
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const totalMeetings = 16;
+        const container = document.getElementById('meetings');
+        const progressBar = document.getElementById('progress-bar');
+        const namaInput = document.getElementById('nama');
+        const nimInput = document.getElementById('nim');
 
-            // Load nama and nim from localStorage
-            namaInput.value = localStorage.getItem('nama') || '';
-            nimInput.value = localStorage.getItem('nim') || '';
+        // Load nama and nim from localStorage
+        namaInput.value = localStorage.getItem('kp_nama') || '';
+        nimInput.value = localStorage.getItem('kp_nim') || '';
 
-            let absensi = JSON.parse(localStorage.getItem('absensi')) || Array(totalMeetings).fill(null);
+        let absensi = JSON.parse(localStorage.getItem('kp_absensi')) || Array(totalMeetings).fill(null);
 
-            // Save nama and nim to localStorage on change
-            namaInput.addEventListener('input', () => {
-                localStorage.setItem('nama', namaInput.value);
-            });
-            nimInput.addEventListener('input', () => {
-                localStorage.setItem('nim', nimInput.value);
-            });
+        // Save nama and nim to localStorage on change
+        namaInput.addEventListener('input', () => {
+            localStorage.setItem('kp_nama', namaInput.value);
+        });
+        nimInput.addEventListener('input', () => {
+            localStorage.setItem('kp_nim', nimInput.value);
+        });
 
-            const updateProgress = () => {
-                const completed = absensi.filter(status => status !== null).length;
-                const progress = (completed / totalMeetings) * 100;
-                progressBar.style.width = progress + '%';
-            };
+        const updateProgress = () => {
+            const completed = absensi.filter(status => status !== null).length;
+            const progress = (completed / totalMeetings) * 100;
+            progressBar.style.width = progress + '%';
+        };
 
-            const markAttendance = (index) => {
-                const selectElement = document.getElementById(`select-${index}`);
-                const status = selectElement.value;
-                absensi[index] = status;
-                localStorage.setItem('absensi', JSON.stringify(absensi));
-                renderMeetings();
-                updateProgress();
-            };
-
-            const renderMeetings = () => {
-                container.innerHTML = '';
-                absensi.forEach((status, index) => {
-                    const meetingDiv = document.createElement('div');
-                    meetingDiv.classList.add('meeting');
-                    const meetingText = document.createElement('span');
-                    meetingText.textContent = `Pertemuan ${index + 1}`;
-                    const selectElement = document.createElement('select');
-                    selectElement.id = `select-${index}`;
-                    selectElement.disabled = status !== null;
-                    ['Hadir', 'Izin', 'Absen'].forEach((label) => {
-                        const option = document.createElement('option');
-                        option.value = label;
-                        option.textContent = label;
-                        if (status === label) {
-                            option.selected = true;
-                        }
-                        selectElement.appendChild(option);
-                    });
-                    const submitButton = document.createElement('button');
-                    submitButton.textContent = 'Submit';
-                    submitButton.disabled = status !== null;
-                    submitButton.onclick = () => markAttendance(index);
-                    
-                    meetingDiv.appendChild(meetingText);
-                    meetingDiv.appendChild(selectElement);
-                    meetingDiv.appendChild(submitButton);
-                    container.appendChild(meetingDiv);
-                });
-            };
-
+        const markAttendance = (index) => {
+            const selectElement = document.getElementById(`select-${index}`);
+            const status = selectElement.value;
+            absensi[index] = status;
+            localStorage.setItem('kp_absensi', JSON.stringify(absensi));
             renderMeetings();
             updateProgress();
-        });
-    </script>
+        };
+
+        const renderMeetings = () => {
+            container.innerHTML = '';
+            absensi.forEach((status, index) => {
+                const meetingDiv = document.createElement('div');
+                meetingDiv.classList.add('meeting');
+                const meetingText = document.createElement('span');
+                meetingText.textContent = `Pertemuan ${index + 1}`;
+                const selectElement = document.createElement('select');
+                selectElement.id = `select-${index}`;
+                selectElement.disabled = status !== null;
+                ['Hadir', 'Izin', 'Absen'].forEach((label) => {
+                    const option = document.createElement('option');
+                    option.value = label;
+                    option.textContent = label;
+                    if (status === label) {
+                        option.selected = true;
+                    }
+                    selectElement.appendChild(option);
+                });
+                const submitButton = document.createElement('button');
+                submitButton.textContent = 'Submit';
+                submitButton.disabled = status !== null;
+                submitButton.onclick = () => markAttendance(index);
+                
+                meetingDiv.appendChild(meetingText);
+                meetingDiv.appendChild(selectElement);
+                meetingDiv.appendChild(submitButton);
+                container.appendChild(meetingDiv);
+            });
+        };
+
+        renderMeetings();
+        updateProgress();
+    });
+</script>
 </body>
 </html>
